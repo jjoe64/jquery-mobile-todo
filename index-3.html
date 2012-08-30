@@ -1,0 +1,107 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+	<title>My Page</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
+	
+	<style type="text/css">
+	.done a {
+		text-decoration: line-through !important;
+		color: green !important;
+	}
+	</style>
+	
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
+	
+	<script type="text/javascript">
+	$(function() {
+		// Klick auf Button "Anlegen"
+		$('#btn_add').click(function() {
+			
+			// Input Feld (Titel) auslesen
+			var title = $('#input_title').val()
+			
+			// neues List Item erstellen
+			var li = $('<li></li>')
+			li.append($('<a href="#dialog_options"></a>').text(title))
+			
+			// zum DOM hinzufügen
+			$('#todo_list').append(li)
+			
+			// Liste neuladen
+			$('#todo_list').listview('refresh')
+		})
+		
+		// Options öffnen
+		var selectedLI = null
+		$('#todo_list li a').live('click', function() {
+			selectedLI = $(this).parents('li')
+		})
+		// Löschen
+		$('#btn_delete').click(function() {
+			selectedLI.remove()
+			$('#todo_list').listview('refresh')
+		})
+		// Abhaken
+		$('#btn_done').click(function() {
+			selectedLI.addClass('done')
+		})
+	})
+	</script>
+</head> 
+<body> 
+
+	<!--
+		Page Index
+	-->
+	<div id="page_index" data-role="page">
+		<div data-role="header">
+			<h1>Todo App</h1>
+			<a href="#page_new" data-icon="add" class="ui-btn-right" data-theme="e">Hinzuf&uuml;gen</a>
+		</div>
+		<div data-role="content">	
+			<p>Diese Aufgaben sind noch zu erledigen:</p>
+			
+			<ul id="todo_list" data-role="listview">
+				<li><a href="#dialog_options">Todo App programmieren</a></li>
+				<li><a href="#dialog_options">Folien vorbereiten</a></li>
+				<li><a href="#dialog_options">Testen</a></li>
+			</ul>
+		</div>
+	</div>
+	
+	<!--
+		Dialog Options
+	-->
+	<div id="dialog_options" data-role="dialog">
+		<div data-role="header">
+			<h1>Options</h1>
+		</div>
+		<div data-role="content">
+			<a data-rel="back" id="btn_done" data-theme="b" data-role="button">Abhaken</a>
+			<a data-rel="back" id="btn_delete" data-theme="a" data-role="button">Löschen</a>
+		</div>
+	</div>
+	
+	<!--
+		Page New
+	-->
+	<div id="page_new" data-role="page">
+		<div data-role="header">
+			<a data-rel="back" data-icon="delete" data-theme="c">Cancel</a>
+			<h1>New TODO</h1>
+		</div>
+		<div data-role="content">
+			<div data-role="fieldcontain">
+				<label for="title">Titel:</label>
+				<input type="text" name="title" id="input_title" value="" placeholder="Titel"/>
+			</div>
+			<a data-rel="back" id="btn_add" data-role="button">Anlegen</a>
+		</div>
+	</div>
+
+</body>
+</html>
+
