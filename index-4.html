@@ -1,0 +1,166 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+	<title>My Page</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
+	
+	<style type="text/css">
+	.done a {
+		text-decoration: line-through !important;
+		color: green !important;
+	}
+	</style>
+	
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
+	
+	<script type="text/javascript">
+	// Model
+	function TodoModel(title, done) {
+		this.title = title;
+		this.done = done;
+		
+		this.createElement = function() {
+			// neues List Item erstellen
+			var li = $('<li></li>')
+			li.append($('<a href="#dialog_options"></a>').text(this.title))
+			if (this.done) {
+				li.addClass('done')
+			}
+			return li
+		}
+	}
+	
+	// Store
+	var Store = {
+		load: function() {
+			for (var i=0; i<localStorage.length; i++) {
+				var key = localStorage.key(i)
+				this._addDOM(new TodoModel(key, localStorage.getItem(key)=="true"))
+			}
+		},
+		add: function(mdl) {
+			localStorage.setItem(mdl.title, mdl.done?"true":"false")
+			this._addDOM(mdl)
+		},
+		_addDOM: function(mdl) {
+			// zum DOM hinzufügen
+			$('#todo_list').append(mdl.createElement())
+			
+			// Liste neuladen
+			$('#todo_list').listview('refresh')
+		},
+		find: function(key) {
+			var done = localStorage.getItem(key)
+			if (done != null) {
+				return new TodoModel(key, done=="true");
+			}
+		},
+		remove: function(mdl) {
+			// aus localStorage löschen
+			localStorage.removeItem(mdl.title)
+			
+			// DOM finden und löschen
+			$('#todo_list a').each(function() {
+				if ($(this).text() == mdl.title) {
+					$(this).parents('li').remove()
+				}
+			})
+		},
+		update: function(mdl) {
+			// local storage updaten
+			localStorage.setItem(mdl.title, mdl.done?"true":"false")
+			
+			// DOM finden und updaten
+			$('#todo_list a').each(function() {
+				if ($(this).text() == mdl.title) {
+					$(this).parents('li').addClass('done')
+				}
+			})
+		}
+	}
+	
+	$(function() {
+		// daten laden
+		Store.load()
+		
+		// Klick auf Button "Anlegen"
+		$('#btn_add').click(function() {
+			
+			// Input Feld (Titel) auslesen
+			var title = $('#input_title').val()
+			
+			// Model erstellen
+			var mdl = new TodoModel(title, false);
+			Store.add(mdl)
+		})
+		
+		// Options öffnen
+		var selectedModel = null
+		$('#todo_list li a').live('click', function() {
+			selectedModel = Store.find($(this).text())
+		})
+		// Löschen
+		$('#btn_delete').click(function() {
+			Store.remove(selectedModel)
+		})
+		// Abhaken
+		$('#btn_done').click(function() {
+			selectedModel.done = true
+			Store.update(selectedModel)
+		})
+	})
+	</script>
+</head> 
+<body> 
+
+	<!--
+		Page Index
+	-->
+	<div id="page_index" data-role="page">
+		<div data-role="header">
+			<h1>Todo App</h1>
+			<a href="#page_new" data-icon="add" class="ui-btn-right" data-theme="e">Hinzuf&uuml;gen</a>
+		</div>
+		<div data-role="content">	
+			<p>Diese Aufgaben sind noch zu erledigen:</p>
+			
+			<ul id="todo_list" data-role="listview">
+			</ul>
+		</div>
+	</div>
+	
+	<!--
+		Dialog Options
+	-->
+	<div id="dialog_options" data-role="dialog">
+		<div data-role="header">
+			<h1>Options</h1>
+		</div>
+		<div data-role="content">
+			<a data-rel="back" id="btn_done" data-theme="b" data-role="button">Abhaken</a>
+			<a data-rel="back" id="btn_delete" data-theme="a" data-role="button">Löschen</a>
+		</div>
+	</div>
+	
+	<!--
+		Page New
+	-->
+	<div id="page_new" data-role="page">
+		<div data-role="header">
+			<a data-rel="back" data-icon="delete" data-theme="c">Cancel</a>
+			<h1>New TODO</h1>
+		</div>
+		<div data-role="content">
+			<div data-role="fieldcontain">
+				<label for="title">Titel:</label>
+				<input type="text" name="title" id="input_title" value="" placeholder="Titel"/>
+			</div>
+			<a data-rel="back" id="btn_add" data-role="button">Anlegen</a>
+		</div>
+	</div>
+
+</body>
+</html>
+
