@@ -1,0 +1,63 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+	<title>My Page</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
+</head> 
+<body> 
+
+	<!--
+		Page Index
+	-->
+	<div id="page_index" data-role="page">
+		<div data-role="header">
+			<h1>Todo App</h1>
+			<a href="#page_new" data-icon="add" class="ui-btn-right" data-theme="e">Hinzuf&uuml;gen</a>
+		</div>
+		<div data-role="content">	
+			<p>Diese Aufgaben sind noch zu erledigen:</p>
+			
+			<ul id="todo_list" data-role="listview">
+				<li><a href="#dialog_options">Todo App programmieren</a></li>
+				<li><a href="#dialog_options">Folien vorbereiten</a></li>
+				<li><a href="#dialog_options">Testen</a></li>
+			</ul>
+		</div>
+	</div>
+	
+	<!--
+		Dialog Options
+	-->
+	<div id="dialog_options" data-role="dialog">
+		<div data-role="header">
+			<h1>Options</h1>
+		</div>
+		<div data-role="content">
+			<a href="#" data-theme="b" data-role="button">Abhaken</a>
+			<a href="#" data-theme="a" data-role="button">Löschen</a>
+		</div>
+	</div>
+	
+	<!--
+		Page New
+	-->
+	<div id="page_new" data-role="page">
+		<div data-role="header">
+			<a data-rel="back" data-icon="delete" data-theme="c">Cancel</a>
+			<h1>New TODO</h1>
+		</div>
+		<div data-role="content">
+			<div data-role="fieldcontain">
+				<label for="title">Titel:</label>
+				<input type="text" name="title" id="title" value="" placeholder="Titel"/>
+			</div>
+			<a href="#" data-role="button">Anlegen</a>
+		</div>
+	</div>
+
+</body>
+</html>
+
